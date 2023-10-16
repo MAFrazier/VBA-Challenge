@@ -25,3 +25,8 @@ Other Considerations
 Use the sheet alphabetical_testing.xlsx while developing your code. This dataset is smaller and will allow you to test faster. Your code should run on this file in under 3 to 5 minutes.
 
 Make sure that the script acts the same on every sheet. The joy of VBA is that it takes the tediousness out of repetitive tasks with the click of a button.
+
+sources 
+Stack Overflow, Excel VBA for Wach Worsheet Loop, https://stackoverflow.com/questions/21918166/excel-vba-for-each-worksheet-loop
+shrawantee, VBA-Scripting---Stock-Market-Analysis, https://github.com/shrawantee/VBA-Scripting---Stock-Market-Analysis/blob/master/HW2_Challenge_DS.vbs
+DataTell, VBA-Challenge, https://github.com/DataTell/VBA-Challenge/blob/master/VBAStocks/VBAStocksScript.bas
