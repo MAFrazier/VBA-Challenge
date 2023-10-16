@@ -1,0 +1,144 @@
+Sub MultipleYearStock():
+
+    'Loop through all Worksheets
+    For Each ws In Worksheets
+    
+        'Set Variables for Data
+        Dim WorksheetName As String
+        Dim i As Long
+        Dim j As Long
+        Dim TickerCount As Long
+        Dim PercentChange As Double
+        Dim GreatIncrease As Double
+        Dim GreatDecrease As Double
+        Dim GreatVolume As Double
+        
+        'Set Variables for finding Ticker LastRow
+        Dim LastRowA As Long
+        Dim LastRowI As Long
+        
+         'Set the WorksheetName
+        WorksheetName = ws.Name
+        
+        'New column headers
+        ws.Cells(1, 9).Value = "Ticker"
+        ws.Cells(1, 10).Value = "Yearly Change"
+        ws.Cells(1, 11).Value = "Percent Change"
+        ws.Cells(1, 12).Value = "Total Stock Volume"
+        ws.Cells(1, 16).Value = "Ticker"
+        ws.Cells(1, 17).Value = "Value"
+        ws.Cells(2, 15).Value = "Greatest % Increase"
+        ws.Cells(3, 15).Value = "Greatest % Decrease"
+        ws.Cells(4, 15).Value = "Greatest Total Volume"
+        
+        'Set Ticker Counter to first row
+        TickerCount = 2
+        j = 2
+        
+        'Find last cell in Ticker column A
+        LastRowA = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        
+            'Loop through all rows
+            For i = 2 To LastRowA
+            
+                'Check if ticker name changed
+                If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+                
+                'Input ticket count in column I
+                ws.Cells(TickerCount, 9).Value = ws.Cells(i, 1).Value
+                
+                'Calculate Yearly Change
+                ws.Cells(TickerCount, 10).Value = ws.Cells(i, 6).Value - ws.Cells(j, 3).Value
+                
+                    'Set Conditional formating
+                    If ws.Cells(TickerCount, 10).Value < 0 Then
+                
+                    'Set cell background color to green for positive change
+                    ws.Cells(TickerCount, 10).Interior.ColorIndex = 4
+                
+                    Else
+                
+                    'Set cell background color to red for negative change
+                    ws.Cells(TickerCount, 10).Interior.ColorIndex = 3
+                
+                    End If
+                    
+                    'Calculate and format percent change
+                    If ws.Cells(j, 3).Value <> 0 Then
+                    PercentChange = ((ws.Cells(i, 6).Value - ws.Cells(j, 3).Value) / ws.Cells(j, 3).Value)
+                    ws.Cells(TickerCount, 11).Value = Format(PercentChange, "Percent")
+                    
+                    Else
+                    
+                    ws.Cells(TickerCount, 11).Value = Format(0, "Percent")
+                    
+                    End If
+                    
+                'Calculate total volume
+                ws.Cells(TickerCount, 12).Value = WorksheetFunction.Sum(Range(ws.Cells(j, 7), ws.Cells(i, 7)))
+                
+                'Increase TickerCount by 1
+                TickerCount = TickerCount + 1
+                j = i + 1
+                
+                End If
+            
+            Next i
+            
+        'Find last cell in Ticker column I
+        LastRowI = ws.Cells(Rows.Count, 9).End(xlUp).Row
+        
+        'Determine the maximum and minimum value for persent change and greatest total Volume
+        GreatVoloume = ws.Cells(2, 12).Value
+        GreatIncrease = ws.Cells(2, 11).Value
+        GreatDecrease = ws.Cells(2, 11).Value
+        
+            'Loop through maximum and minmum value for persent change and greatest total Volume
+            For i = 2 To LastRowI
+                
+                'Find greatest increase
+                If ws.Cells(i, 11).Value > GreatIncrease Then
+                GreatIncrease = ws.Cells(i, 11).Value
+                ws.Cells(2, 16).Value = ws.Cells(i, 9).Value
+                
+                Else
+                
+                GreatIncrease = GreatIncrease
+                
+                End If
+                
+                'Find greatest decrease
+                If ws.Cells(i, 11).Value < GreatDecrease Then
+                GreatDecrease = ws.Cells(i, 11).Value
+                ws.Cells(3, 16).Value = ws.Cells(i, 9).Value
+                
+                Else
+                
+                GreatDecrease = GreatDecrease
+                
+                End If
+                
+                'Find greatest total volume
+                If ws.Cells(i, 12).Value > GreatVolume Then
+                GreatVolume = ws.Cells(i, 12).Value
+                ws.Cells(4, 16).Value = ws.Cells(i, 9).Value
+                
+                Else
+                
+                GreatVolume = GreatVolume
+                
+                End If
+                
+            'Format for maximum and minimum value for percent change and greast total volume
+            ws.Cells(2, 17).Value = Format(GreatIncrease, "Percent")
+            ws.Cells(3, 17).Value = Format(GreatDecrease, "Percent")
+            ws.Cells(4, 17).Value = Format(GreatVolume, "Scientific")
+            
+            Next i
+            
+        'Autofit columns on Worksheets
+        Worksheets(WorksheetName).Columns("A:Z").AutoFit
+            
+    Next ws
+        
+End Sub
